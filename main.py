@@ -1,15 +1,12 @@
 from UserInputHandler import UserInputHandler, listener
-from utils import text_to_speech
+from utils import text_to_speech, string_contain
 
 user_input_handler = UserInputHandler()
 
 
 def is_special_keyword(user_input):
-    keywords = ["stop", "next"]
-    for keyword in keywords:
-        if keyword in user_input:
-            return True
-    return False
+    keywords = ["stop", "next", "reset", "restart"]
+    return string_contain(user_input, keywords)
 
 
 def main():
@@ -18,7 +15,7 @@ def main():
             # user_input = input()
             user_input = listener.listen()
             print(user_input)
-            if user_input in ["cedar", 'cedar', 'cider', 'Sada', 'say that']:
+            if user_input and string_contain(user_input, ["simsima", "sarah", "sara", "cedar", 'cedar', 'cider', 'Sada', 'say that']):
                 listener.active = True
                 text_to_speech("Tell me")
                 main()

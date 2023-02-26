@@ -28,7 +28,9 @@ instruction = "1. if I told you to play music or play a song in any way replay b
 
 def get_open_ai_response(prompt, conversation_history):
     _conversation_history = "\n".join(conversation_history)
-    _prompt = f"instruction=[{instruction}], conversation_history=[{conversation_history}], new_message=[{prompt}]"
+    _prompt = f"instruction=[{instruction}]," \
+              f" conversation_history=[{conversation_history}]," \
+              f" new_message=[{prompt}]"
 
     openai.api_key = api_key
 
