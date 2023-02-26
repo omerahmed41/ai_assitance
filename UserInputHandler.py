@@ -14,6 +14,9 @@ class UserInputHandler:
         pass
 
     def handle_input(self, user_input):
+        if music_player.is_playing and listener.active:
+            listener.reduce_music_volume_to_hear(5, music_player)
+
         if music_player.is_playing:
             if string_contain(user_input, ["stop"]):
                 text_to_speech("sure")
@@ -27,7 +30,6 @@ class UserInputHandler:
             elif string_contain(user_input, ["reset", "restart"]):
                 UserInputHandler.conversation_history = []
                 return
-        print(f"You said: {user_input}")
         response = get_open_ai_response(user_input, UserInputHandler.conversation_history)
         if not response:
             self.handle_open_ai_bad_reponse()

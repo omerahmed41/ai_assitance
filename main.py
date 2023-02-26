@@ -1,4 +1,4 @@
-from UserInputHandler import UserInputHandler, listener
+from UserInputHandler import UserInputHandler, listener, music_player
 from utils import text_to_speech, string_contain
 
 user_input_handler = UserInputHandler()
@@ -14,14 +14,19 @@ def main():
         try:
             # user_input = input()
             user_input = listener.listen()
-            print(user_input)
-            if user_input and string_contain(user_input, ["simsima", "sarah", "sara", "cedar", 'cedar', 'cider', 'Sada', 'say that']):
+            print("user_input:", user_input)
+            if not user_input:
+                continue
+
+            if string_contain(user_input, ["simsima", "sarah", "sara", "cedar", 'cedar', 'cider', 'Sada', 'say that']):
                 listener.active = True
+                listener.reduce_music_volume_to_hear(10, music_player)
                 text_to_speech("Tell me")
-                main()
+                continue
+
             print("listener.active: ", listener.active)
-            if user_input and (listener.active or is_special_keyword(user_input)):
-                pass
+
+            if listener.active or is_special_keyword(user_input):
                 user_input_handler.handle_input(user_input)
                 main()
 

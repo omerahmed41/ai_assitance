@@ -83,6 +83,8 @@ class MusicPlayer():
             print("No active devices found.")
 
     def get_sp(self):
+        if self.sp:
+            return self.sp
         try:
             sp = self.login()
             self.get_device_id()
@@ -107,6 +109,11 @@ class MusicPlayer():
 
         self.is_playing = False
 
+    def set_volume(self, value):
+        self.get_sp()
+        print(f"set_volume {value}")
+        self.sp.volume(value, device_id=self.device_id)
+
     def next_track(self):
         self.get_sp()
         self.sp.next_track(device_id=self.device_id)
@@ -118,6 +125,7 @@ class MusicPlayer():
         track = sp.track(song_uri)
         track_uri = track['uri']
         sp.start_playback(uris=[track_uri], device_id=device_id)
+        self.set_volume(60)
 
     def play_album(self, sp, song_uri, device_id):
         track = sp.track(song_uri)

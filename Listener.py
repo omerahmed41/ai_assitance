@@ -1,5 +1,8 @@
 import speech_recognition as sr
 from scipy.signal import butter, filtfilt, iirnotch
+import threading
+
+from music_player import MusicPlayer
 
 
 class Listener:
@@ -25,11 +28,11 @@ class Listener:
             # Apply notch filter to remove speaker output frequency range
             nyq = source.SAMPLE_RATE / 2.0
             notch_freq = 3000  # Adjust this frequency to remove the speaker output range
-            notch_width = 100  # Adjust this width to widen the frequency range to remove
+            notch_width = 300  # Adjust this width to widen the frequency range to remove
             b, a = iirnotch(notch_freq / nyq, notch_width / nyq)
 
             # Apply filter to data using forward-backward filtering
-            source.filter = lambda data, _: filtfilt(b, a, self.bandpass_filter(data, 300, 2000, source.SAMPLE_RATE))
+            # source.filter = lambda data, _: filtfilt(b, a, self.bandpass_filter(data, 100, 3000, source.SAMPLE_RATE))
 
             r.adjust_for_ambient_noise(source)  # adjust for ambient noise
             print("Speak now...")
@@ -44,3 +47,8 @@ class Listener:
             except sr.RequestError:
                 pass
                 # print("Sorry, my speech recognition service is down.")
+
+    def reduce_music_volume_to_hear(self, time_waiting, music_player: MusicPlayer):
+        print("reduce_music_volume_to_hear")
+        music_player.set_volume(30)
+        threading.Timer(time_waiting, lambda: music_player.set_volume(90)).start()
